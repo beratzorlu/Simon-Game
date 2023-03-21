@@ -5,7 +5,8 @@
 const {
     game,
     newGame,
-    showScore
+    showScore,
+    addTurn
 } = require("../game");
 
 beforeAll(() => {
@@ -45,8 +46,8 @@ describe("newGame works as expected", () => {
     test("should set the game score to zero", () => {
         expect(game.score).toEqual(0);
     });
-    test("should clear the currentGame array", () => {
-        expect(game.currentGame).toEqual([]);
+    test("should be one move in the computer's game array", () => {
+        expect(game.currentGame.length).toBe(1);
     });
     test("should clear the playerMoves array", () => {
         expect(game.playerMoves).toEqual([]);
