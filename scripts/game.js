@@ -23,9 +23,15 @@ function newGame() {
     game.score = 0;
     game.currentGame = [];
     game.playerMoves = [];
+    showScore();
+};
+
+function showScore() {
+    document.getElementById("score").innerText = game.score;
 };
 
 module.exports = {
     game,
-    newGame
+    newGame,
+    showScore
 }; //This is because we will be exporting more than one object from this file.
