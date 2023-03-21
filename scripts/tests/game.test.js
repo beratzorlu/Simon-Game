@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-const { expect } = require("@jest/globals");
 const {
     game,
     newGame,
@@ -62,6 +61,12 @@ describe("newGame works as expected", () => {
     });
     test("should reset turnNumber to zero", () => {
         expect(game.turnNumber).toEqual(0);
+    });
+    test("expect data-listener attribute to return true", () => {
+        const elements = document.getElementsByClassName("circle");
+        for (let element of elements) {
+            expect(element.getAttribute("data-listener")).toEqual("true");
+        };
     });
 });
 

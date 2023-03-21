@@ -25,6 +25,17 @@ function newGame() {
     game.turnNumber = 0;
     game.currentGame = [];
     game.playerMoves = [];
+    for (let circle of document.getElementsByClassName("circle")) { //If you want to confirm that an even listener has been attached to the DOM, then you need to use an attribute or global state to do it.
+        if (circle.getAttribute("data-listener") !== "true") {
+            circle.addEventListener("click", (e) => {
+                let move = e.target.getAttribute("id");
+                lightsOn(move);
+                game.playerMoves.push(move);
+                playerTurn();
+            });
+            circle.setAttribute("data-listener", "true");
+        };
+    };
     showScore();
     addTurn();
 };
@@ -73,7 +84,7 @@ function showTurns() {
             clearInterval(turns);
         };
     }, 800);
-    
+
 };
 
 module.exports = {
