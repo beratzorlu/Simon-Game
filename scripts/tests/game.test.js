@@ -1,12 +1,14 @@
 /**
  * @jest-environment jsdom
  */
+const { expect } = require("@jest/globals");
 const {
     game,
     newGame,
     showScore,
     addTurn,
-    lightsOn
+    lightsOn,
+    showTurns
 } = require("../game");
 
 beforeAll(() => { //This runs before all of the tests run.
@@ -33,6 +35,9 @@ describe("game object contains correct keys", () => {
     test("choices contains the correct ids", () => {
         expect(game.choices).toEqual(["button1", "button2", "button3", "button4"]);
     });
+    test("turnNumber key should exist", () => {
+        expect("turnNumber" in game).toBe(true);
+    });
 });
 
 describe("newGame works as expected", () => {
@@ -54,6 +59,9 @@ describe("newGame works as expected", () => {
     });
     test("should display zero for the element with id of 'score'", () => {
         expect(document.getElementById("score").innerText).toEqual(0);
+    });
+    test("should reset turnNumber to zero", () => {
+        expect(game.turnNumber).toEqual(0);
     });
 });
 
@@ -77,5 +85,10 @@ describe("gameplay functions as expected", () => {
         let button = document.getElementById(game.currentGame[0]);
         lightsOn(game.currentGame[0]);
         expect(button.classList).toContain("light");
+    });
+    test("showTurns should update game.turnNumber", () => {
+        game.turnNumber = 42;
+        showTurns();
+        expect(game.turnNumber).toBe(0);
     });
 });

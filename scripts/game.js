@@ -10,6 +10,7 @@
 let game = {
     score: 0,
     currentGame: [],
+    turnNumber: 0,
     playerMoves: [],
     choices: ["button1", "button2", "button3", "button4"],
 };
@@ -21,6 +22,7 @@ function newGame() {
      * Clear the currentGame array.
      */
     game.score = 0;
+    game.turnNumber = 0;
     game.currentGame = [];
     game.playerMoves = [];
     showScore();
@@ -41,16 +43,37 @@ function addTurn() {
      * Call showTurns() function.
      */
     game.playerMoves = [];
-    game.currentGame.push(game.choices[(Math.floor(Math.random()*4))]);
-    //showTurns();
+    game.currentGame.push(game.choices[(Math.floor(Math.random() * 4))]);
+    showTurns();
 
 };
 
 function lightsOn(circ) {
+    /**
+     * Add light class to one of the passed circles.
+     * After a period of time, remove the light class from the current circle.
+     */
     document.getElementById(circ).classList.add("light");
     setTimeout(() => {
         document.getElementById(circ).classList.remove("light");
     }, 400);
+};
+
+function showTurns() {
+    /**
+     * Step through currentGame.
+     * Turn on the light.
+     * Turn off the light.
+     */
+    game.turnNumber = 0;
+    let turns = setInterval(() => {
+        lightsOn(game.currentGame[game.turnNumber]);
+        game.turnNumber++;
+        if (game.turnNumber >= game.currentGame.length) {
+            clearInterval(turns);
+        };
+    }, 800);
+    
 };
 
 module.exports = {
@@ -58,5 +81,6 @@ module.exports = {
     newGame,
     showScore,
     addTurn,
-    lightsOn
+    lightsOn,
+    showTurns
 }; //This is because we will be exporting more than one object from this file.
