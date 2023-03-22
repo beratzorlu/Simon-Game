@@ -11,7 +11,10 @@ let game = {
     score: 0,
     currentGame: [],
     turnNumber: 0,
+    turnInProgress: false,
+    lastButton: "",
     playerMoves: [],
+    lastButton: [],
     choices: ["button1", "button2", "button3", "button4"],
 };
 
@@ -25,13 +28,18 @@ function newGame() {
     game.turnNumber = 0;
     game.currentGame = [];
     game.playerMoves = [];
+    game.turnInProgress = false;
+    game.lastButton = "";
     for (let circle of document.getElementsByClassName("circle")) { //If you want to confirm that an even listener has been attached to the DOM, then you need to use an attribute or global state to do it.
         if (circle.getAttribute("data-listener") !== "true") {
             circle.addEventListener("click", (e) => {
-                let move = e.target.getAttribute("id");
-                lightsOn(move);
-                game.playerMoves.push(move);
-                playerTurn();
+                if (game.currentGame.length > 0 && !game.turnInProgress) {
+                    let move = e.target.getAttribute("id");
+                    game.lastButton = move;
+                    lightsOn(move);
+                    game.playerMoves.push(move);
+                    playerTurn();
+                };
             });
             circle.setAttribute("data-listener", "true");
         };
@@ -76,25 +84,29 @@ function showTurns() {
      * Turn on the light.
      * Turn off the light.
      */
+    game.turnInProgress = true;
     game.turnNumber = 0;
     let turns = setInterval(() => {
         lightsOn(game.currentGame[game.turnNumber]);
         game.turnNumber++;
         if (game.turnNumber >= game.currentGame.length) {
             clearInterval(turns);
+            game.turnInProgress = false;
         };
     }, 800);
-
 };
 
 function playerTurn() {
     let i = game.playerMoves.length - 1;
-    if (game.currentGame[1] === game.playerMoves[1]) {
+    if (game.currentGame[i] === game.playerMoves[i]) {
         if (game.currentGame.length == game.playerMoves.length) {
             game.score++;
             showScore();
             addTurn();
         };
+    } else {
+        alert("Wrong input!");
+        newGame();
     };
 };
 

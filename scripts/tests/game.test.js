@@ -11,6 +11,8 @@ const {
     playerTurn
 } = require("../game");
 
+jest.spyOn(window, "alert").mockImplementation(() => { });
+
 beforeAll(() => { //This runs before all of the tests run.
     let fs = require("fs");
     let fileContents = fs.readFileSync("index.html", "utf-8");
@@ -37,6 +39,15 @@ describe("game object contains correct keys", () => {
     });
     test("turnNumber key should exist", () => {
         expect("turnNumber" in game).toBe(true);
+    });
+    test("turnInProgress key should exist", () => {
+        expect("turnInProgress" in game).toBe(true);
+    });
+    test("turnInProgress is equal to false", () => {
+        expect("turnInProgress" in game).toBe(true); // True because turnInProgress equals to false.
+    });
+    test("lastButton key should exist", () => {
+        expect("lastButton" in game).toBe(true);
     });
 });
 
@@ -68,6 +79,14 @@ describe("newGame works as expected", () => {
         for (let element of elements) {
             expect(element.getAttribute("data-listener")).toEqual("true");
         };
+    });
+    test("should reset turnInProgress to default value", () => {
+        newGame();
+        expect(game.turnInProgress).toBe(true);
+    });
+    test("should reset lastButton to default value", () => {
+        newGame();
+        expect(game.lastButton).toEqual("");
     });
 });
 
@@ -102,4 +121,27 @@ describe("gameplay functions as expected", () => {
         playerTurn();
         expect(game.score).toBe(1);
     });
+    test("test should call an alert if the player input is incorrect", () => {
+        game.playerMoves.push("wrong");
+        playerTurn();
+        expect(window.alert).toBeCalledWith("Wrong input!");
+    });
+    test("should return true when the CPU is playing its turn", () => {
+        showTurns();
+        expect(game.turnInProgress).toBe(true);
+    });
+    test("clicking during the CPU's turn should fail", () => {
+        showTurns();
+        game.lastButton = "";
+        document.getElementById("button2").click();
+        expect(game.lastButton).toEqual("");
+    });
 });
+
+
+// What happens if the user puts in too much input/spams?
+// Somehow manages to click two circles at the exact same time? This is more relevant for mobile devices.
+// What happens if a third party software interferes with the functionality? Like browser plugins.
+// What happens when the user refreshes the page in the middle of an active game?
+// What happens if the user clicks a button before the start of the game?
+// If the user clicks a circle during the CPU's turn, how will this impact the game?
