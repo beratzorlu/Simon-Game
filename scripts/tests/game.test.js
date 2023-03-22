@@ -7,7 +7,8 @@ const {
     showScore,
     addTurn,
     lightsOn,
-    showTurns
+    showTurns,
+    playerTurn
 } = require("../game");
 
 beforeAll(() => { //This runs before all of the tests run.
@@ -95,5 +96,10 @@ describe("gameplay functions as expected", () => {
         game.turnNumber = 42;
         showTurns();
         expect(game.turnNumber).toBe(0);
+    });
+    test("should increment the score if the turn is correct", () => {
+        game.playerMoves.push(game.currentGame[0]);
+        playerTurn();
+        expect(game.score).toBe(1);
     });
 });

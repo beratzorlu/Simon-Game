@@ -87,11 +87,23 @@ function showTurns() {
 
 };
 
+function playerTurn() {
+    let i = game.playerMoves.length - 1;
+    if (game.currentGame[1] === game.playerMoves[1]) {
+        if (game.currentGame.length == game.playerMoves.length) {
+            game.score++;
+            showScore();
+            addTurn();
+        };
+    };
+};
+
 module.exports = {
     game,
     newGame,
     showScore,
     addTurn,
     lightsOn,
-    showTurns
+    showTurns,
+    playerTurn
 }; //This is because we will be exporting more than one object from this file.
